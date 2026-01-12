@@ -1,0 +1,19 @@
+# Container image tar dosyaları (büyük dosyalar)
+images/*.tar
+
+# Environment files (içinde IP/hostname olabilir)
+app-node/.env
+monitoring-node/.env
+
+# Docker volumes
+**/data/
+
+# Log dosyaları
+*.log
+
+# Geçici dosyalar
+*.tmp
+.DS_Store
+
+# Backup dosyaları
+**/backups/

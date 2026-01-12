@@ -1,0 +1,108 @@
+# OpenTelemetry Collector - Agent Mode Configuration
+# Bu collector uygulama nodlarında çalışır ve verileri merkezi node'a gönderir
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+  # Host Metrics Receiver - Sistem metriklerini toplar
+  hostmetrics:
+    collection_interval: 30s
+    scrapers:
+      # CPU metrikleri
+      cpu:
+
+      # Disk I/O metrikleri
+      disk:
+
+      # Filesystem metrikleri
+      filesystem:
+
+      # Memory metrikleri
+      memory:
+
+      # Network metrikleri
+      network:
+
+      # Load average metrikleri
+      load:
+
+      # Process metrikleri
+      processes:
+
+      # Paging/Swap metrikleri
+      paging:
+
+processors:
+  batch:
+    timeout: 10s
+    send_batch_size: 1024
+
+  memory_limiter:
+    check_interval: 1s
+    limit_mib: 256
+
+  # Attribute ekleme - hangi node'dan geldiğini işaretle
+  resource:
+    attributes:
+      - key: deployment.environment
+        value: production
+        action: upsert
+      - key: node_name
+        value: "${env:NODE_NAME}"
+        action: upsert
+      - key: service.instance.id
+        value: "${env:NODE_NAME}"
+        action: upsert
+
+exporters:
+  # Merkezi monitoring node'a gönder
+  otlp:
+    endpoint: "${MONITORING_NODE_HOST}:4317"
+    tls:
+      insecure: true
+    sending_queue:
+      enabled: true
+      num_consumers: 10
+      queue_size: 1000
+    retry_on_failure:
+      enabled: true
+      initial_interval: 5s
+      max_interval: 30s
+      max_elapsed_time: 300s
+
+  # Local debugging için (opsiyonel - prod'da kapatılabilir)
+  debug:
+    verbosity: detailed
+    sampling_initial: 5
+    sampling_thereafter: 200
+
+extensions:
+  health_check:
+    endpoint: 0.0.0.0:13133
+
+  pprof:
+    endpoint: 0.0.0.0:1777
+
+service:
+  extensions: [health_check, pprof]
+
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, resource, batch]
+      exporters: [otlp, debug]
+
+    metrics:
+      receivers: [otlp, hostmetrics]
+      processors: [memory_limiter, resource, batch]
+      exporters: [otlp, debug]
+
+    logs:
+      receivers: [otlp]
+      processors: [memory_limiter, resource, batch]
+      exporters: [otlp, debug]

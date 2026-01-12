@@ -1,0 +1,59 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: 'production'
+    monitor: 'otel-monitoring'
+
+# Alertmanager configuration (opsiyonel)
+# alerting:
+#   alertmanagers:
+#     - static_configs:
+#         - targets:
+#           - alertmanager:9093
+
+# Rule dosyaları (opsiyonel)
+# rule_files:
+#   - "alerts/*.yml"
+
+scrape_configs:
+  # OpenTelemetry Collector'ın kendi metrikleri
+  - job_name: 'otel-collector-internal'
+    static_configs:
+      - targets: ['otel-collector-gateway:8888']
+        labels:
+          service: 'otel-collector'
+          type: 'internal-metrics'
+
+  # OpenTelemetry Collector tarafından export edilen uygulama metrikleri
+  - job_name: 'otel-application-metrics'
+    static_configs:
+      - targets: ['otel-collector-gateway:8889']
+        labels:
+          collector_type: 'gateway'
+
+  # Prometheus kendi metrikleri
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+        labels:
+          service: 'prometheus'
+
+  # Grafana metrikleri (eğer expose ediliyorsa)
+  - job_name: 'grafana'
+    static_configs:
+      - targets: ['grafana:3000']
+        labels:
+          service: 'grafana'
+
+  # Zipkin metrikleri
+  - job_name: 'zipkin'
+    static_configs:
+      - targets: ['zipkin:9411']
+        labels:
+          service: 'zipkin'
+
+  # Node exporter varsa (sistem metrikleri için)
+  # - job_name: 'node-exporter'
+  #   static_configs:
+  #     - targets: ['node-exporter:9100']
