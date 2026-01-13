@@ -11,6 +11,7 @@ receivers:
 
   # Host Metrics Receiver - Sistem metriklerini toplar
   hostmetrics:
+    root_path: /hostfs
     collection_interval: 30s
     scrapers:
       # CPU metrikleri
@@ -31,8 +32,38 @@ receivers:
       # Load average metrikleri
       load:
 
-      # Process metrikleri
+      # Process sayıları (toplam)
       processes:
+
+      # Process-level detaylı metrikler (CPU, memory, disk I/O per process)
+      process:
+        include:
+          names:
+            - ".*"  # Tüm processleri topla
+          match_type: regexp
+        mute_process_name_error: true
+        mute_process_exe_error: true
+        mute_process_io_error: true
+        mute_process_cgroup_error: true
+        metrics:
+          process.cpu.time:
+            enabled: true
+          process.cpu.utilization:
+            enabled: true
+          process.memory.usage:
+            enabled: true
+          process.memory.virtual:
+            enabled: true
+          process.disk.io:
+            enabled: true
+          process.threads:
+            enabled: true
+          process.open_file_descriptors:
+            enabled: true
+          process.signals_pending:
+            enabled: true
+          process.context_switches:
+            enabled: true
 
       # Paging/Swap metrikleri
       paging:
@@ -53,16 +84,17 @@ processors:
         value: production
         action: upsert
       - key: node_name
-        value: "${env:NODE_NAME}"
+        value: "${env:HOSTNAME}"
         action: upsert
       - key: service.instance.id
-        value: "${env:NODE_NAME}"
+        value: "${env:HOSTNAME}"
         action: upsert
 
 exporters:
   # Merkezi monitoring node'a gönder
+  # Test ortamında: 14317, Production'da ayrı makinelerde: 4317
   otlp:
-    endpoint: "${MONITORING_NODE_HOST}:4317"
+    endpoint: "${MONITORING_NODE_HOST}:14317"
     tls:
       insecure: true
     sending_queue:

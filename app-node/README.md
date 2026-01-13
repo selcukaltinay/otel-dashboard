@@ -19,15 +19,21 @@ Bu dizin, uygulama sunucularında çalışacak hafif OpenTelemetry Collector kon
 cp .env.example .env
 ```
 
-`.env` dosyasını düzenleyin ve monitoring node'un IP adresini girin:
+`.env` dosyasını düzenleyin ve monitoring node'un **LAN üzerindeki IP adresi veya hostname**'ini girin:
 ```bash
+# Monitoring node'un LAN IP'si
 MONITORING_NODE_HOST=192.168.1.100
+
+# VEYA hostname kullanarak
+MONITORING_NODE_HOST=monitoring-server
 ```
+
+**Not:** Bu collector host network modunda çalışır, böylece LAN üzerindeki diğer makinelerle doğrudan iletişim kurabilir.
 
 ### 2. Deployment
 
 ```bash
-./scripts/deploy.sh
+docker-compose up -d
 ```
 
 ## Portlar

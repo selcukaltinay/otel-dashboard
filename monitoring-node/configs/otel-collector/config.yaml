@@ -3,12 +3,13 @@
 
 receivers:
   # App node'lardan gelen veriler
+  # App node: 4317/4318, Gateway: 14317/14318 (test için farklı portlar)
   otlp:
     protocols:
       grpc:
-        endpoint: 0.0.0.0:4317
+        endpoint: 0.0.0.0:14317
       http:
-        endpoint: 0.0.0.0:4318
+        endpoint: 0.0.0.0:14318
 
 processors:
   batch:
@@ -39,8 +40,9 @@ exporters:
       enabled: true
 
   # Zipkin exporter - trace'ler için
+  # Host network modunda zipkin localhost'ta
   zipkin:
-    endpoint: "http://zipkin:9411/api/v2/spans"
+    endpoint: "http://localhost:9411/api/v2/spans"
     format: proto
 
   # Debug exporter (debug/monitoring için)
@@ -57,7 +59,7 @@ exporters:
 
 extensions:
   health_check:
-    endpoint: 0.0.0.0:13133
+    endpoint: 0.0.0.0:13134  # App node: 13133, Gateway: 13134
     path: "/health"
     check_collector_pipeline:
       enabled: true
@@ -65,13 +67,23 @@ extensions:
       exporter_failure_threshold: 5
 
   pprof:
-    endpoint: 0.0.0.0:1777
+    endpoint: 0.0.0.0:1778  # App node: 1777, Gateway: 1778
 
   zpages:
-    endpoint: 0.0.0.0:55679
+    endpoint: 0.0.0.0:55680  # App node kullanmıyor, ama ayıralım
 
 service:
   extensions: [health_check, pprof, zpages]
+
+  # Collector kendi internal metrikleri - app node ile çakışmaması için farklı port
+  telemetry:
+    metrics:
+      readers:
+        - pull:
+            exporter:
+              prometheus:
+                host: 0.0.0.0
+                port: 8890
 
   pipelines:
     # Trace pipeline

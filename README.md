@@ -93,6 +93,14 @@ otel/
 └── README.md                   # Bu dosya
 ```
 
+## Network Mimarisi
+
+Bu implementasyon **host network** modunu kullanır:
+- Docker bridge network kullanılmaz
+- Tüm servisler doğrudan host üzerinde çalışır
+- App node ve monitoring node **farklı fiziksel makinelerde** çalışır
+- Makineler LAN üzerinden birbirlerini görürler
+
 ## Kurulum Adımları
 
 ### Adım 1: İnternet Erişimi Olan Ortamda (Hazırlık)
@@ -118,43 +126,53 @@ Tüm `/home/satech/work/otel` dizinini USB, harici disk veya ağ aktarımı ile 
 
 ### Adım 3: Monitoring Node Kurulumu (Merkezi Sunucu)
 
+**1. Dosyaları monitoring sunucusuna kopyalayın:**
 ```bash
-cd /home/satech/work/otel/monitoring-node
-
-# Image'ları yükle
-./scripts/load-images.sh
-
-# Stack'i başlat
-./scripts/deploy.sh
+# Sadece monitoring-node klasörünü kopyalayın
+scp -r /home/satech/work/otel/monitoring-node user@monitoring-server:/opt/
 ```
 
-**Önemli:** Firewall ayarlarını yapmayı unutmayın! App node'lardan port 4317'ye erişime izin verin.
-
+**2. Monitoring sunucusunda:**
 ```bash
-# firewalld kullanıyorsanız:
-sudo firewall-cmd --permanent --add-port=4317/tcp
-sudo firewall-cmd --reload
+cd /opt/monitoring-node
 
-# ufw kullanıyorsanız:
-sudo ufw allow 4317/tcp
+# Stack'i başlat (host network modunda)
+docker-compose up -d
+
+# Servislerin durumunu kontrol edin
+docker-compose ps
 ```
+
+**Not:** Tüm servisler host network modunda çalıştığından, firewall yapılandırmasına gerek yoktur (firewall kapalıysa). Eğer firewall aktifse, port 4317 ve 3000'i açmanız gerekebilir.
 
 ### Adım 4: App Node Kurulumu (Her Uygulama Sunucusunda)
 
+**1. Dosyaları app sunucusuna kopyalayın:**
 ```bash
-cd /home/satech/work/otel/app-node
+# Sadece app-node klasörünü kopyalayın
+scp -r /home/satech/work/otel/app-node user@app-server:/opt/
+```
 
-# .env dosyası oluştur ve monitoring node IP'sini ayarla
+**2. App sunucusunda:**
+```bash
+cd /opt/app-node
+
+# .env dosyası oluştur ve monitoring node adresini ayarla
 cp .env.example .env
 nano .env
-# MONITORING_NODE_HOST=192.168.1.100 (monitoring node'un IP'si)
+# MONITORING_NODE_HOST değerini monitoring sunucunun LAN IP'si veya hostname'i ile değiştirin
+# Örnek: MONITORING_NODE_HOST=192.168.1.100
+# Örnek: MONITORING_NODE_HOST=monitoring-server
 
-# Image'ı yükle
-./scripts/load-images.sh
+# Collector'ı başlat (host network modunda)
+docker-compose up -d
 
-# Collector'ı başlat
-./scripts/deploy.sh
+# Durumu kontrol edin
+docker-compose ps
+docker-compose logs -f
 ```
+
+**Not:** NODE_NAME otomatik olarak makinenin hostname'inden alınır, elle ayarlamanıza gerek yok.
 
 ## Servisler ve Portlar
 

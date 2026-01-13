@@ -223,7 +223,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "otel_system_cpu_load_average_{node_name=~\"$node\"}1m",
+          "expr": "otel_system_cpu_load_average_1m{node_name=~\"$node\"}",
           "refId": "A"
         }
       ],
@@ -701,7 +701,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "otel_system_cpu_load_average_{node_name=~\"$node\"}1m",
+          "expr": "otel_system_cpu_load_average_1m{node_name=~\"$node\"}",
           "legendFormat": "1m",
           "refId": "A"
         },
@@ -710,7 +710,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "otel_system_cpu_load_average_{node_name=~\"$node\"}5m",
+          "expr": "otel_system_cpu_load_average_5m{node_name=~\"$node\"}",
           "legendFormat": "5m",
           "refId": "B"
         },
@@ -719,7 +719,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "otel_system_cpu_load_average_{node_name=~\"$node\"}15m",
+          "expr": "otel_system_cpu_load_average_15m{node_name=~\"$node\"}",
           "legendFormat": "15m",
           "refId": "C"
         }

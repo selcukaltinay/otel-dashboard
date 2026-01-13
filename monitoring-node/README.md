@@ -88,15 +88,19 @@ Bu sunucuda aşağıdakiler kurulu olmalı:
 
 ## Firewall Ayarları
 
-App node'lardan gelen trafiğe izin verin:
+**Önemli:** Bu servisler host network modunda çalıştığından, app node'lardan gelen trafiğe izin vermek için firewall kuralları eklemeniz gerekebilir:
 
 ```bash
-# Port 4317'yi aç (OTLP gRPC)
+# OTLP gRPC portunu aç (app node'lardan veri alımı için)
 sudo firewall-cmd --permanent --add-port=4317/tcp
 sudo firewall-cmd --reload
 
 # veya ufw kullanıyorsanız:
 sudo ufw allow 4317/tcp
+
+# LAN içinden Grafana erişimi için (opsiyonel):
+sudo firewall-cmd --permanent --add-port=3000/tcp
+sudo firewall-cmd --reload
 ```
 
 ## Kontrol ve Monitoring

@@ -17,18 +17,18 @@ global:
 #   - "alerts/*.yml"
 
 scrape_configs:
-  # OpenTelemetry Collector'ın kendi metrikleri
-  - job_name: 'otel-collector-internal'
+  # OpenTelemetry Collector Gateway'in kendi metrikleri
+  - job_name: 'otel-collector-gateway-internal'
     static_configs:
-      - targets: ['otel-collector-gateway:8888']
+      - targets: ['localhost:8890']
         labels:
-          service: 'otel-collector'
+          service: 'otel-collector-gateway'
           type: 'internal-metrics'
 
   # OpenTelemetry Collector tarafından export edilen uygulama metrikleri
   - job_name: 'otel-application-metrics'
     static_configs:
-      - targets: ['otel-collector-gateway:8889']
+      - targets: ['localhost:8889']
         labels:
           collector_type: 'gateway'
 
@@ -42,14 +42,14 @@ scrape_configs:
   # Grafana metrikleri (eğer expose ediliyorsa)
   - job_name: 'grafana'
     static_configs:
-      - targets: ['grafana:3000']
+      - targets: ['localhost:3000']
         labels:
           service: 'grafana'
 
   # Zipkin metrikleri
   - job_name: 'zipkin'
     static_configs:
-      - targets: ['zipkin:9411']
+      - targets: ['localhost:9411']
         labels:
           service: 'zipkin'
 

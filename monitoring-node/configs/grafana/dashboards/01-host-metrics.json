@@ -252,7 +252,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "otel_system_cpu_load_average_{node_name=~\"$node\"}1m",
+          "expr": "otel_system_cpu_load_average_1m{node_name=~\"$node\"}",
           "refId": "A"
         }
       ],

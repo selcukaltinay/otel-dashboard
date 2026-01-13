@@ -1,26 +1,18 @@
-version: '3.8'
-
 services:
   # OpenTelemetry Collector (Agent Mode)
   otel-collector:
     image: otel/opentelemetry-collector:latest
     container_name: otel-collector-agent
     command: ["--config=/etc/otel-collector-config.yaml"]
+    pid: 'host'
+    privileged: true
+    network_mode: "host"
     volumes:
       - ./configs/otel-collector/config.yaml:/etc/otel-collector-config.yaml
-    ports:
-      - "14317:4317"   # OTLP gRPC receiver (farklı port)
-      - "14318:4318"   # OTLP HTTP receiver (farklı port)
-      - "18888:8888"   # Prometheus metrics exposed by the collector (farklı port)
-      - "13134:13133" # health_check extension (farklı port)
+      - /:/hostfs:ro
     environment:
-      - MONITORING_NODE_HOST=${MONITORING_NODE_HOST:-otel-collector-gateway}
-      - NODE_NAME=${NODE_NAME:-node-01}
-    networks:
-      - otel-network
+      # Monitoring node'un hostname veya IP adresi - .env dosyasından okunmalı
+      - MONITORING_NODE_HOST=${MONITORING_NODE_HOST}
+      - HOST_PROC=/hostfs/proc
+      - HOST_SYS=/hostfs/sys
     restart: unless-stopped
-
-networks:
-  otel-network:
-    external: true
-    name: monitoring-node_otel-network

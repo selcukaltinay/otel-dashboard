@@ -4,7 +4,7 @@ datasources:
   - name: Prometheus
     type: prometheus
     access: proxy
-    url: http://prometheus:9090
+    url: http://localhost:9090  # Host network modunda localhost
     isDefault: true
     editable: true
     jsonData:
@@ -13,5 +13,5 @@ datasources:
   - name: Zipkin
     type: zipkin
     access: proxy
-    url: http://zipkin:9411
+    url: http://localhost:9411  # Host network modunda localhost
     editable: true
