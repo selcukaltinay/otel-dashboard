@@ -27,6 +27,286 @@
                 "h": 1,
                 "w": 24,
                 "x": 0,
+                "y": 19
+            },
+            "id": 200,
+            "title": "Cluster Process Overview",
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            }
+                        ]
+                    },
+                    "unit": "none"
+                }
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 6,
+                "x": 0,
+                "y": 20
+            },
+            "id": 201,
+            "targets": [
+                {
+                    "expr": "sum(otel_system_processes_count)",
+                    "legendFormat": "Total Processes",
+                    "refId": "A"
+                }
+            ],
+            "title": "Total Processes (Cluster)",
+            "type": "stat"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 1
+                            }
+                        ]
+                    },
+                    "unit": "none"
+                }
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 6,
+                "x": 6,
+                "y": 20
+            },
+            "id": 202,
+            "targets": [
+                {
+                    "expr": "sum(otel_system_processes_count{status=\"zombie\"})",
+                    "legendFormat": "Zombies",
+                    "refId": "A"
+                }
+            ],
+            "title": "Zombie Processes",
+            "type": "stat"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            }
+                        ]
+                    },
+                    "unit": "none"
+                }
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 6,
+                "x": 12,
+                "y": 20
+            },
+            "id": 203,
+            "targets": [
+                {
+                    "expr": "sum(otel_system_processes_count{status=\"running\"})",
+                    "legendFormat": "Running",
+                    "refId": "A"
+                }
+            ],
+            "title": "Running Processes",
+            "type": "stat"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        }
+                    },
+                    "mappings": [],
+                    "unit": "short"
+                }
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 6,
+                "x": 18,
+                "y": 20
+            },
+            "id": 204,
+            "options": {
+                "legend": {
+                    "displayMode": "list",
+                    "placement": "right",
+                    "showLegend": true
+                },
+                "pieType": "donut",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "tooltip": {
+                    "mode": "single",
+                    "sort": "none"
+                }
+            },
+            "targets": [
+                {
+                    "expr": "sum by (status) (otel_system_processes_count)",
+                    "legendFormat": "{{status}}",
+                    "refId": "A"
+                }
+            ],
+            "title": "State Distribution",
+            "type": "piechart"
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 24
+            },
+            "id": 300,
+            "title": "🚨 Alerts & Anomalies (Automatic Detection)",
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 0,
+                "y": 25
+            },
+            "id": 301,
+            "targets": [
+                {
+                    "expr": "time() - otel_process_created < 900",
+                    "legendFormat": "{{process_executable_name}} ({{node_name}})",
+                    "refId": "A"
+                }
+            ],
+            "title": "⚠️ Recently Restarted (<15m)",
+            "type": "table",
+            "transformations": [
+                {
+                    "id": "organize",
+                    "options": {
+                        "excludeByName": {
+                            "Value": true
+                        },
+                        "renameByName": {
+                            "process_executable_name": "Process",
+                            "node_name": "Node"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 8,
+                "y": 25
+            },
+            "id": 302,
+            "targets": [
+                {
+                    "expr": "topk(5, rate(otel_process_paging_faults_total[1m]))",
+                    "legendFormat": "{{process_executable_name}} ({{node_name}})",
+                    "refId": "A"
+                }
+            ],
+            "title": "🔥 Top Swapping Processes (Page Faults/s)",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 16,
+                "y": 25
+            },
+            "id": 303,
+            "targets": [
+                {
+                    "expr": "topk(5, otel_process_threads)",
+                    "legendFormat": "{{process_executable_name}} ({{node_name}})",
+                    "refId": "A"
+                }
+            ],
+            "title": "💣 Top Thread Consumers",
+            "type": "timeseries"
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
                 "y": 0
             },
             "id": 100,
@@ -105,11 +385,75 @@
             "type": "timeseries"
         },
         {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {
+                        "axisLabel": "Disk I/O",
+                        "drawStyle": "line",
+                        "fillOpacity": 10
+                    },
+                    "unit": "binBps"
+                }
+            },
+            "gridPos": {
+                "h": 9,
+                "w": 12,
+                "x": 0,
+                "y": 10
+            },
+            "id": 4,
+            "targets": [
+                {
+                    "expr": "topk($limit, sum by (process_executable_name, node_name) (rate(otel_process_disk_io_bytes_total{node_name=~\"$node\"}[1m])))",
+                    "legendFormat": "{{process_executable_name}} ({{node_name}})",
+                    "refId": "A"
+                }
+            ],
+            "title": "Top $limit Disk I/O Consumers",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {
+                        "axisLabel": "CS/s",
+                        "drawStyle": "line",
+                        "fillOpacity": 10
+                    },
+                    "unit": "ops"
+                }
+            },
+            "gridPos": {
+                "h": 9,
+                "w": 12,
+                "x": 12,
+                "y": 10
+            },
+            "id": 5,
+            "targets": [
+                {
+                    "expr": "topk($limit, sum by (process_executable_name, node_name) (rate(otel_process_context_switches_total{node_name=~\"$node\"}[1m])))",
+                    "legendFormat": "{{process_executable_name}} ({{node_name}})",
+                    "refId": "A"
+                }
+            ],
+            "title": "Top $limit Context Switchers",
+            "type": "timeseries"
+        },
+        {
             "gridPos": {
                 "h": 1,
                 "w": 24,
                 "x": 0,
-                "y": 10
+                "y": 33
             },
             "id": 101,
             "title": "Process List Search",
@@ -144,6 +488,56 @@
                     }
                 },
                 "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "Uptime"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "s"
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "Disk Read/s"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "binBps"
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "Disk Write/s"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "binBps"
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "Threads"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.cellOptions",
+                                "value": {
+                                    "type": "auto"
+                                }
+                            }
+                        ]
+                    },
                     {
                         "matcher": {
                             "id": "byName",
@@ -197,6 +591,158 @@
                                 "value": "bytes"
                             }
                         ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "VSZ (Virtual Mem)"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "Page Faults/s"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "ops"
+                            },
+                            {
+                                "id": "thresholds",
+                                "value": {
+                                    "mode": "absolute",
+                                    "steps": [
+                                        {
+                                            "color": "transparent",
+                                            "value": null
+                                        },
+                                        {
+                                            "color": "red",
+                                            "value": 10
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "id": "custom.cellOptions",
+                                "value": {
+                                    "mode": "gradient",
+                                    "type": "color-background"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "Net I/O (Bps)"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "binBps"
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "Threads"
+                        },
+                        "properties": [
+                            {
+                                "id": "thresholds",
+                                "value": {
+                                    "mode": "absolute",
+                                    "steps": [
+                                        {
+                                            "color": "transparent",
+                                            "value": null
+                                        },
+                                        {
+                                            "color": "red",
+                                            "value": 500
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "id": "custom.cellOptions",
+                                "value": {
+                                    "mode": "gradient",
+                                    "type": "color-background"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "Open FDs"
+                        },
+                        "properties": [
+                            {
+                                "id": "thresholds",
+                                "value": {
+                                    "mode": "absolute",
+                                    "steps": [
+                                        {
+                                            "color": "transparent",
+                                            "value": null
+                                        },
+                                        {
+                                            "color": "red",
+                                            "value": 1000
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "id": "custom.cellOptions",
+                                "value": {
+                                    "mode": "gradient",
+                                    "type": "color-background"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "CS/s"
+                        },
+                        "properties": [
+                            {
+                                "id": "thresholds",
+                                "value": {
+                                    "mode": "absolute",
+                                    "steps": [
+                                        {
+                                            "color": "transparent",
+                                            "value": null
+                                        },
+                                        {
+                                            "color": "red",
+                                            "value": 5000
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "id": "custom.cellOptions",
+                                "value": {
+                                    "mode": "gradient",
+                                    "type": "color-background"
+                                }
+                            }
+                        ]
                     }
                 ]
             },
@@ -204,7 +750,7 @@
                 "h": 14,
                 "w": 24,
                 "x": 0,
-                "y": 11
+                "y": 34
             },
             "id": 3,
             "targets": [
@@ -219,6 +765,66 @@
                     "format": "table",
                     "instant": true,
                     "refId": "B"
+                },
+                {
+                    "expr": "otel_process_threads{node_name=~\"$node\", process_executable_name=~\"$process_search.*\"}",
+                    "format": "table",
+                    "instant": true,
+                    "refId": "C"
+                },
+                {
+                    "expr": "rate(otel_process_disk_io_bytes_total{node_name=~\"$node\", process_executable_name=~\"$process_search.*\", direction=\"read\"}[1m])",
+                    "format": "table",
+                    "instant": true,
+                    "refId": "D"
+                },
+                {
+                    "expr": "rate(otel_process_disk_io_bytes_total{node_name=~\"$node\", process_executable_name=~\"$process_search.*\", direction=\"write\"}[1m])",
+                    "format": "table",
+                    "instant": true,
+                    "refId": "E"
+                },
+                {
+                    "expr": "otel_process_open_file_descriptors{node_name=~\"$node\", process_executable_name=~\"$process_search.*\"}",
+                    "format": "table",
+                    "instant": true,
+                    "refId": "F"
+                },
+                {
+                    "expr": "time() - otel_process_created{node_name=~\"$node\", process_executable_name=~\"$process_search.*\"}",
+                    "format": "table",
+                    "instant": true,
+                    "refId": "G"
+                },
+                {
+                    "expr": "rate(otel_process_context_switches_total{node_name=~\"$node\", process_executable_name=~\"$process_search.*\"}[1m])",
+                    "format": "table",
+                    "instant": true,
+                    "refId": "H"
+                },
+                {
+                    "expr": "otel_process_memory_virtual_bytes{node_name=~\"$node\", process_executable_name=~\"$process_search.*\"}",
+                    "format": "table",
+                    "instant": true,
+                    "refId": "I"
+                },
+                {
+                    "expr": "otel_process_signals_pending{node_name=~\"$node\", process_executable_name=~\"$process_search.*\"}",
+                    "format": "table",
+                    "instant": true,
+                    "refId": "J"
+                },
+                {
+                    "expr": "rate(otel_process_paging_faults_total{node_name=~\"$node\", process_executable_name=~\"$process_search.*\"}[1m])",
+                    "format": "table",
+                    "instant": true,
+                    "refId": "K"
+                },
+                {
+                    "expr": "rate(otel_process_network_io_bytes{node_name=~\"$node\", process_executable_name=~\"$process_search.*\"}[1m])",
+                    "format": "table",
+                    "instant": true,
+                    "refId": "L"
                 }
             ],
             "title": "Process List (Filtered by '$process_search')",
@@ -242,7 +848,17 @@
                             "process_executable_name": "Process",
                             "process_pid": "PID",
                             "Value #A": "CPU %",
-                            "Value #B": "Memory"
+                            "Value #B": "Memory",
+                            "Value #C": "Threads",
+                            "Value #D": "Disk Read/s",
+                            "Value #E": "Disk Write/s",
+                            "Value #F": "Open FDs",
+                            "Value #G": "Uptime",
+                            "Value #H": "CS/s",
+                            "Value #I": "VSZ (Virtual Mem)",
+                            "Value #J": "Pending Signals",
+                            "Value #K": "Page Faults/s",
+                            "Value #L": "Net I/O (Bps)"
                         }
                     }
                 }

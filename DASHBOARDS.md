@@ -16,23 +16,22 @@ Sistemin dağıtık yapısı için optimize edilmiş, merkezi monitoring dashboa
 Tüm cluster'ın "Node Exporter" tarzı ana görünümü.
 - **Multi-Node Visuals**: "All" seçeneğiyle tüm sistemdeki node'ları tek grafikte *ayrı ayrı* (multi-series) görürsünüz. Outlier tespiti için idealdir.
 - **System Entropy**: Bağlam değiştirme (Context Switches) ile gizli CPU yükü analizi.
+- **Advanced Metrics**: Zombie Process takibi, Memory Breakdown (Used/Cached/Free) ve Disk Latency analizi.
 - **Kapsam**: CPU, Memory, Network, Disk I/O ve Health Metrics.
 
 ### 2. Global Process Observer
 **URL**: http://localhost:3000/d/global-process-observer
 
 Dağıtık process analizi.
-- **Global Search**: Tüm nodlardaki processler içinde regex ile arama yapabilirsiniz.
-- **Top Consumers**: Hangi node'da çalıştığı fark etmeksizin, tüm sistemdeki en çok kaynak tüketen processleri sıralar.
-- **Process Grid**: Node bilgisiyle birlikte detaylı process tablosu.
+- **Top Consumers** (En Üstte): CPU, Memory, Disk I/O ve Top Context Switchers grafikleri (En çok kaynak tüketenler).
+- **Cluster Overview**: Toplam/Running/Zombie sayıları ve Process State Dağılımı (Pasta Grafik).
+- **🚨 Alerts & Anomalies**:
+  - **Recent Restarts**: Son 15 dk içinde başlayan processler.
+  - **Memory Pressure**: Saniyede 10'dan fazla Page Fault üreten processler.
+  - **Thread/FD Risk**: 500+ Thread veya 1000+ Open FD kullanan processler.
+- **Detailed Grid**: Sütunlar: Threads, Open FDs, Disk R/W, **Uptime**, **VSZ (Virtual Mem)**, **Pending Signals**, **Page Faults/s**, **CS/s** ve **Net I/O**.
 
-### 3. Collector Health
-**URL**: http://localhost:3000/d/collector-health
 
-OpenTelemetry Ajanlarının (Collector) kendi sağlık durumunu izler.
-- **Memory RSS**: Ajanların bellek kullanımı.
-- **Queue Size & Export Rate**: Veri gönderim performansı ve darboğazlar.
-- **Failures**: Paket kaybı veya iletim hataları.
 
 ## Kurulum
 Dashboardları aktif etmek için Grafana'yı yeniden başlatın:
