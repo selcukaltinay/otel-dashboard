@@ -1,0 +1,765 @@
+{
+    "annotations": {
+        "list": [
+            {
+                "builtIn": 1,
+                "datasource": {
+                    "type": "grafana",
+                    "uid": "-- Grafana --"
+                },
+                "enable": true,
+                "hide": true,
+                "iconColor": "rgba(0, 211, 255, 1)",
+                "name": "Annotations & Alerts",
+                "type": "dashboard"
+            }
+        ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": null,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "gradientMode": "opacity",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "lineInterpolation": "linear",
+                        "lineWidth": 2,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "never",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            }
+                        ]
+                    },
+                    "unit": "percent"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 0,
+                "y": 0
+            },
+            "id": 1,
+            "options": {
+                "legend": {
+                    "calcs": [
+                        "mean",
+                        "max",
+                        "last"
+                    ],
+                    "displayMode": "table",
+                    "placement": "right",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "desc"
+                }
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "PBFA97CFB590B2093"
+                    },
+                    "expr": "100 - (avg by (node_name) (rate(otel_system_cpu_time_seconds_total{state=\"idle\", node_name=~\"$node\"}[1m])) * 100)",
+                    "legendFormat": "{{node_name}}",
+                    "refId": "A"
+                }
+            ],
+            "title": "CPU Utilisation % (Per Node)",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "gradientMode": "opacity",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "lineInterpolation": "linear",
+                        "lineWidth": 2,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "never",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            }
+                        ]
+                    },
+                    "unit": "percent"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 12,
+                "y": 0
+            },
+            "id": 2,
+            "options": {
+                "legend": {
+                    "calcs": [
+                        "mean",
+                        "max",
+                        "last"
+                    ],
+                    "displayMode": "table",
+                    "placement": "right",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "desc"
+                }
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "PBFA97CFB590B2093"
+                    },
+                    "expr": "sum by (node_name) (otel_system_memory_usage_bytes{state=\"used\", node_name=~\"$node\"}) / sum by (node_name) (otel_system_memory_usage_bytes{node_name=~\"$node\"}) * 100",
+                    "legendFormat": "{{node_name}}",
+                    "refId": "A"
+                }
+            ],
+            "title": "Memory Usage % (Per Node)",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "gradientMode": "opacity",
+                        "lineWidth": 2
+                    },
+                    "unit": "short"
+                }
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 0,
+                "y": 8
+            },
+            "id": 3,
+            "options": {
+                "legend": {
+                    "calcs": [
+                        "last"
+                    ],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "desc"
+                }
+            },
+            "targets": [
+                {
+                    "expr": "otel_system_cpu_load_average_1m{node_name=~\"$node\"}",
+                    "legendFormat": "{{node_name}}",
+                    "refId": "A"
+                }
+            ],
+            "title": "Load Average (1m)",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisCenteredZero": true,
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "gradientMode": "opacity",
+                        "lineWidth": 2
+                    },
+                    "unit": "Bps"
+                }
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 8,
+                "y": 8
+            },
+            "id": 4,
+            "options": {
+                "legend": {
+                    "calcs": [
+                        "max"
+                    ],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "desc"
+                }
+            },
+            "targets": [
+                {
+                    "expr": "sum by (node_name) (rate(otel_system_network_io_bytes_total{node_name=~\"$node\", direction=\"receive\"}[1m]))",
+                    "legendFormat": "{{node_name}} RX",
+                    "refId": "A"
+                },
+                {
+                    "expr": "sum by (node_name) (rate(otel_system_network_io_bytes_total{node_name=~\"$node\", direction=\"transmit\"}[1m])) * -1",
+                    "legendFormat": "{{node_name}} TX",
+                    "refId": "B"
+                }
+            ],
+            "title": "Network Traffic (Aggregated per Node)",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisCenteredZero": true,
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "gradientMode": "opacity",
+                        "lineWidth": 2
+                    },
+                    "unit": "Bps"
+                }
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 16,
+                "y": 8
+            },
+            "id": 5,
+            "options": {
+                "legend": {
+                    "calcs": [
+                        "max"
+                    ],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "desc"
+                }
+            },
+            "targets": [
+                {
+                    "expr": "sum by (node_name) (rate(otel_system_disk_io_bytes_total{node_name=~\"$node\", direction=\"read\"}[1m]))",
+                    "legendFormat": "{{node_name}} Read",
+                    "refId": "A"
+                },
+                {
+                    "expr": "sum by (node_name) (rate(otel_system_disk_io_bytes_total{node_name=~\"$node\", direction=\"write\"}[1m])) * -1",
+                    "legendFormat": "{{node_name}} Write",
+                    "refId": "B"
+                }
+            ],
+            "title": "Disk Throughput (Inverted)",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "custom": {
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "gradientMode": "opacity",
+                        "lineWidth": 2
+                    },
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "yellow",
+                                "value": 70
+                            },
+                            {
+                                "color": "red",
+                                "value": 90
+                            }
+                        ]
+                    },
+                    "unit": "percent"
+                }
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 24,
+                "x": 0,
+                "y": 16
+            },
+            "id": 6,
+            "options": {
+                "legend": {
+                    "calcs": [
+                        "max",
+                        "last"
+                    ],
+                    "displayMode": "table",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "desc"
+                }
+            },
+            "targets": [
+                {
+                    "expr": "sum by (node_name) (otel_system_filesystem_usage_bytes{node_name=~\"$node\", state=\"used\"}) / sum by (node_name) (otel_system_filesystem_usage_bytes{node_name=~\"$node\"}) * 100",
+                    "legendFormat": "{{node_name}}",
+                    "refId": "A"
+                }
+            ],
+            "title": "Disk Usage % (Total vs Used)",
+            "type": "timeseries"
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 24
+            },
+            "id": 100,
+            "title": "Health & Diagnostics",
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {
+                        "drawStyle": "line",
+                        "fillOpacity": 10
+                    },
+                    "unit": "ops"
+                }
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 6,
+                "x": 0,
+                "y": 25
+            },
+            "id": 7,
+            "targets": [
+                {
+                    "expr": "sum by (node_name) (rate(otel_system_network_errors_total{node_name=~\"$node\"}[1m]))",
+                    "legendFormat": "{{node_name}} Errors",
+                    "refId": "A"
+                },
+                {
+                    "expr": "sum by (node_name) (rate(otel_system_network_dropped_total{node_name=~\"$node\"}[1m]))",
+                    "legendFormat": "{{node_name}} Dropped",
+                    "refId": "B"
+                }
+            ],
+            "title": "Network Errors & Drops",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "fillOpacity": 70,
+                        "lineWidth": 0
+                    },
+                    "mappings": [],
+                    "unit": "short"
+                }
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 6,
+                "x": 6,
+                "y": 25
+            },
+            "id": 8,
+            "options": {
+                "displayMode": "basic",
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "orientation": "horizontal",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "showUnfilled": true,
+                "text": {}
+            },
+            "targets": [
+                {
+                    "expr": "sum by (state) (otel_system_network_connections{node_name=~\"$node\"})",
+                    "legendFormat": "{{state}}",
+                    "refId": "A"
+                }
+            ],
+            "title": "TCP Connection States",
+            "type": "bargauge"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "yellow",
+                                "value": 70
+                            },
+                            {
+                                "color": "red",
+                                "value": 90
+                            }
+                        ]
+                    },
+                    "unit": "percent"
+                }
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 6,
+                "x": 12,
+                "y": 25
+            },
+            "id": 9,
+            "options": {
+                "displayMode": "lcd",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "showUnfilled": true
+            },
+            "targets": [
+                {
+                    "expr": "sum by (node_name) (otel_system_filesystem_inodes_usage{node_name=~\"$node\", state=\"used\"}) / sum by (node_name) (otel_system_filesystem_inodes_usage{node_name=~\"$node\"}) * 100",
+                    "legendFormat": "{{node_name}}",
+                    "refId": "A"
+                }
+            ],
+            "title": "Inode Usage % (Highest 10)",
+            "type": "bargauge"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "custom": {
+                        "drawStyle": "line",
+                        "fillOpacity": 20,
+                        "axisLabel": "%"
+                    },
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 1
+                            }
+                        ]
+                    },
+                    "unit": "percent"
+                }
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 6,
+                "x": 18,
+                "y": 25
+            },
+            "id": 10,
+            "targets": [
+                {
+                    "expr": "sum by (node_name) (otel_system_paging_usage_bytes{node_name=~\"$node\", state=\"used\"}) / sum by (node_name) (otel_system_paging_usage_bytes{node_name=~\"$node\"}) * 100",
+                    "legendFormat": "{{node_name}}",
+                    "refId": "A"
+                }
+            ],
+            "title": "Swap Usage % (Alert if > 0)",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {
+                        "drawStyle": "line",
+                        "fillOpacity": 10
+                    },
+                    "unit": "ops"
+                }
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 24,
+                "x": 0,
+                "y": 33
+            },
+            "id": 11,
+            "targets": [
+                {
+                    "expr": "sum by (node_name) (rate(otel_process_context_switches_total{node_name=~\"$node\"}[1m]))",
+                    "legendFormat": "{{node_name}} Context Switches",
+                    "refId": "A"
+                }
+            ],
+            "title": "System Entropy (Context Switches/sec)",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {
+                        "drawStyle": "line",
+                        "axisCenteredZero": true,
+                        "fillOpacity": 10
+                    },
+                    "unit": "pps"
+                }
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 24,
+                "x": 0,
+                "y": 41
+            },
+            "id": 12,
+            "targets": [
+                {
+                    "expr": "sum by (node_name) (rate(otel_system_network_packets_total{node_name=~\"$node\", direction=\"receive\"}[1m]))",
+                    "legendFormat": "{{node_name}} RX",
+                    "refId": "A"
+                },
+                {
+                    "expr": "sum by (node_name) (rate(otel_system_network_packets_total{node_name=~\"$node\", direction=\"transmit\"}[1m])) * -1",
+                    "legendFormat": "{{node_name}} TX",
+                    "refId": "B"
+                }
+            ],
+            "title": "Network Packet Rate (PPS) - Multicast Indicator",
+            "type": "timeseries"
+        }
+    ],
+    "refresh": "10s",
+    "schemaVersion": 38,
+    "style": "dark",
+    "tags": [
+        "distributed"
+    ],
+    "templating": {
+        "list": [
+            {
+                "current": {
+                    "selected": true,
+                    "text": [
+                        "All"
+                    ],
+                    "value": [
+                        "$__all"
+                    ]
+                },
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "PBFA97CFB590B2093"
+                },
+                "definition": "label_values(otel_system_cpu_time_seconds_total, node_name)",
+                "hide": 0,
+                "includeAll": true,
+                "label": "Node",
+                "multi": true,
+                "name": "node",
+                "options": [],
+                "query": {
+                    "query": "label_values(otel_system_cpu_time_seconds_total, node_name)",
+                    "refId": "StandardVariableQuery"
+                },
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 1,
+                "type": "query"
+            }
+        ]
+    },
+    "time": {
+        "from": "now-15m",
+        "to": "now"
+    },
+    "timezone": "browser",
+    "title": "Distributed Infrastructure",
+    "uid": "distributed-infrastructure",
+    "version": 1,
+    "weekStart": ""
+}
